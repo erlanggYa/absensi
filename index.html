@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABSENSIR – Absensi Siswa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HALAMAN LOGIN -->
+<main id="auth" class="auth">
+  <section class="auth-hero">
+    <div>
+      <div class="brand">ABSEN<span>SIR</span></div>
+      <p>Absensi siswa yang rapi. Masuk dulu dengan akunmu, lalu catat kehadiran hari ini.</p>
+    </div>
+    <ul class="steps">
+      <li>Masuk dengan NIS dan kata sandi</li>
+      <li>Pilih status kehadiran hari ini</li>
+      <li>Lihat riwayat absenmu kapan saja</li>
+    </ul>
+  </section>
+  <section class="auth-panel">
+    <div class="box">
+      <div class="tabs" role="tablist">
+        <button role="tab" id="tabLogin" aria-selected="true">Masuk</button>
+        <button role="tab" id="tabReg" aria-selected="false">Daftar akun</button>
+      </div>
+
+      <form id="fLogin" novalidate>
+        <label for="lNis">NIS</label>
+        <input id="lNis" inputmode="numeric" autocomplete="username" required>
+        <label for="lPass">Kata sandi</label>
+        <div class="pw"><input id="lPass" type="password" autocomplete="current-password" required><button type="button" class="eye" aria-label="Tampilkan kata sandi" aria-pressed="false"><svg class="on" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7c1.8 0 3.4-.5 4.8-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <button class="btn" type="submit">Masuk</button>
+      </form>
+
+      <form id="fReg" class="hidden" novalidate>
+        <label for="rName">Nama lengkap</label>
+        <input id="rName" autocomplete="name" required>
+        <label for="rNis">NIS</label>
+        <input id="rNis" inputmode="numeric" required>
+        <label for="rClass">Kelas</label>
+        <input id="rClass" placeholder="Contoh: XI IPA 2" required>
+        <label for="rPass">Kata sandi (minimal 6 karakter)</label>
+        <div class="pw"><input id="rPass" type="password" autocomplete="new-password" required><button type="button" class="eye" aria-label="Tampilkan kata sandi" aria-pressed="false"><svg class="on" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="off" viewBox="0 0 24 24"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.6 10.6 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7c1.8 0 3.4-.5 4.8-1.2"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg></button></div>
+        <button class="btn" type="submit">Buat akun</button>
+      </form>
+
+      <div class="msg" id="authMsg" role="alert"></div>
+      <div class="demo">Akun contoh: NIS <b>1001</b>, kata sandi <b>siswa123</b></div>
+    </div>
+  </section>
+</main>
+
+<!-- HALAMAN ABSEN (hanya tampil setelah login) -->
+<div id="app" class="hidden">
+  <header class="top">
+    <div class="brand">ABSEN<span>SIR</span></div>
+    <div class="who">
+      <div><b id="uName"></b><br><span id="uClass"></span></div>
+      <button class="btn ghost" id="logout">Keluar</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="panel" aria-labelledby="hAbsen">
+      <h2 id="hAbsen">Absen hari ini</h2>
+      <div class="clock" id="clock" aria-live="off">--:--:--</div>
+      <div class="date" id="date"></div>
+
+      <div id="formAbsen">
+        <div class="choices" role="group" aria-label="Status kehadiran">
+          <button class="choice" data-s="Hadir" aria-pressed="true">Hadir</button>
+          <button class="choice" data-s="Izin" aria-pressed="false">Izin</button>
+          <button class="choice" data-s="Sakit" aria-pressed="false">Sakit</button>
+        </div>
+        <button class="btn" id="btnAbsen">Kirim absen</button>
+      </div>
+      <div id="done" class="hidden"></div>
+      <div class="msg" id="appMsg" role="status"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="hRiwayat">
+      <h2 id="hRiwayat">Riwayat absen</h2>
+      <div class="stat" id="stat"></div>
+      <div class="tw"><table><thead><tr><th>Tanggal</th><th>Jam</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div class="empty hidden" id="empty">Belum ada riwayat. Kirim absen pertamamu hari ini.</div>
+    </section>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
